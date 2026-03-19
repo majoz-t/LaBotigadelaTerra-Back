@@ -1,6 +1,7 @@
 package com.labotigadelaterra.la_botiga_de_la_terra.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.labotigadelaterra.la_botiga_de_la_terra.entity.enums.Role;
 
 import jakarta.persistence.Column;
@@ -29,6 +30,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
 
