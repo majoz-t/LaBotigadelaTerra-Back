@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.labotigadelaterra.la_botiga_de_la_terra.dto.request.DiagnosticFormRequestDTO;
+import com.labotigadelaterra.la_botiga_de_la_terra.dto.response.DiagnosticFormResponseDTO;
 import com.labotigadelaterra.la_botiga_de_la_terra.entity.DiagnosticForm;
 import com.labotigadelaterra.la_botiga_de_la_terra.entity.User;
 import com.labotigadelaterra.la_botiga_de_la_terra.entity.enums.FormStatus;
@@ -17,40 +18,50 @@ public class DiagnosticFormServiceImpl implements DiagnosticFormService {
     private final DiagnosticFormRepository diagnosticFormRepository;
     private final DiagnosticFormMapper diagnosticFormMapper;
 
-    public DiagnosticFormServiceImpl(DiagnosticFormRepository diagnosticFormRepository,
-            DiagnosticFormMapper diagnosticFormMapper) {
+    public DiagnosticFormServiceImpl(DiagnosticFormRepository diagnosticFormRepository, DiagnosticFormMapper diagnosticFormMapper) {
         this.diagnosticFormRepository = diagnosticFormRepository;
         this.diagnosticFormMapper = diagnosticFormMapper;
     }
 
     @Override
-    public DiagnosticForm createForm(DiagnosticFormRequestDTO request, User user) {
+    public DiagnosticFormResponseDTO createForm(DiagnosticFormRequestDTO request, User user) {
         DiagnosticForm form = diagnosticFormMapper.toEntity(request, user);
         form.setFormStatus(FormStatus.DRAFT);
-        return diagnosticFormRepository.save(form);
+        DiagnosticForm savedForm = diagnosticFormRepository.save(form);
+        return diagnosticFormMapper.toResponse(savedForm);
     }
 
     @Override
-    public DiagnosticForm getFormById(int id) {
-        return diagnosticFormRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Formulario no encontrado"));
-    }
-
-    // @Override
-    // public List<DiagnosticForm> getFormsByUser(User user) {
-    //     return 
-    // }
-
-    @Override
-    public DiagnosticForm updateForm(int id, DiagnosticFormRequestDTO request) {
+    public DiagnosticFormResponseDTO updateForm(int id, DiagnosticFormRequestDTO request) {
         DiagnosticForm existingForm = diagnosticFormRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Formulario no encontrado"));
         if (existingForm.getFormStatus() != FormStatus.DRAFT) {
             throw new RuntimeException("Solo se pueden editar formularios en estado BORRADOR.");
         }
         diagnosticFormMapper.updateEntityFromDto(request, existingForm);
-        return diagnosticFormRepository.save(existingForm);
+        DiagnosticForm updatedForm = diagnosticFormRepository.save(existingForm);
+        return diagnosticFormMapper.toResponse(updatedForm);
     }
+
+    @Override
+    public DiagnosticFormResponseDTO getFormById(int id) {
+        DiagnosticForm form = diagnosticFormRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Formulario no encontrado"));
+        return diagnosticFormMapper.toResponse(form);       
+    }
+
+    @Override
+    public List<DiagnosticFormResponseDTO> getFormsByUser(User user) {
+        if (user == null || user.getId() == null) {
+            throw new RuntimeException("Usuario no encontrado");
+        }
+        List<DiagnosticForm> forms = diagnosticFormRepository.findByUser(user);
+        return forms.stream()
+            .map(diagnosticFormMapper::toResponse) 
+            .toList();                             
+    }
+
+    
 
     @Override
     public void deleteForm(Integer id) {

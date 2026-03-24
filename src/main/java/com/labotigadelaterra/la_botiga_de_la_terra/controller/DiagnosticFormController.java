@@ -1,5 +1,7 @@
 package com.labotigadelaterra.la_botiga_de_la_terra.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,13 +27,11 @@ import jakarta.validation.Valid;
 public class DiagnosticFormController {
 
     private final DiagnosticFormService diagnosticFormService;
-    private final DiagnosticFormMapper mapper;
     private final UserRepository userRepository;
 
     public DiagnosticFormController(DiagnosticFormService diagnosticFormService, DiagnosticFormMapper mapper,
             UserRepository userRepository) {
         this.diagnosticFormService = diagnosticFormService;
-        this.mapper = mapper;
         this.userRepository = userRepository;
     }
 
@@ -40,23 +40,29 @@ public class DiagnosticFormController {
         User user = new User();
         user.setId(1);
         // User user = authService.getCurrentUser();
-        DiagnosticForm form = diagnosticFormService.createForm(request, user);
-        DiagnosticFormResponseDTO response = mapper.toResponse(form);
+        DiagnosticFormResponseDTO response = diagnosticFormService.createForm(request, user);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DiagnosticFormResponseDTO> updateForm(@PathVariable int id,
-            @Valid @RequestBody DiagnosticFormRequestDTO request) {
-        DiagnosticForm updatedForm = diagnosticFormService.updateForm(id, request);
-        DiagnosticFormResponseDTO response = mapper.toResponse(updatedForm);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ResponseEntity<DiagnosticFormResponseDTO> updateForm(@PathVariable int id, @Valid @RequestBody DiagnosticFormRequestDTO request) {  
+        DiagnosticFormResponseDTO updatedForm = diagnosticFormService.updateForm(id, request);
+        return new ResponseEntity<>(updatedForm, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<DiagnosticFormResponseDTO> getFormById(@PathVariable int id) {
-        DiagnosticForm form = diagnosticFormService.getFormById(id);
-        DiagnosticFormResponseDTO response = mapper.toResponse(form);
+        DiagnosticFormResponseDTO response = diagnosticFormService.getFormById(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @GetMapping("/userforms")
+    public ResponseEntity<List<DiagnosticFormResponseDTO>> getFormsByUser() {
+        User user = new User();
+        user.setId(1);
+        // dsp context de usuario logueado
+        List<DiagnosticFormResponseDTO> forms = diagnosticFormService.getFormsByUser(user);
+        return new ResponseEntity<>(forms, HttpStatus.OK);
+    }
+
 }
