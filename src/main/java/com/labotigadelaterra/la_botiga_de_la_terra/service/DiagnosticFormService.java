@@ -10,11 +10,17 @@ public interface DiagnosticFormService {
 
     public DiagnosticFormResponseDTO createForm(DiagnosticFormRequestDTO request, User user);
 
+    public DiagnosticFormResponseDTO updateForm(int id, DiagnosticFormRequestDTO request);
+
     public DiagnosticFormResponseDTO getFormById(int id);
 
     public List<DiagnosticFormResponseDTO> getFormsByUser(User user);
 
-    public DiagnosticFormResponseDTO updateForm(int id, DiagnosticFormRequestDTO request);
+    public void deleteForm(int id);
 
-    public void deleteForm(Integer id);
+    public DiagnosticFormResponseDTO submitForm(int id);
+
+    public List<DiagnosticFormResponseDTO> getFormsForDoctor();
+
+    public DiagnosticFormResponseDTO confirmPayment(int id);
 }

@@ -17,6 +17,7 @@ import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -68,21 +69,21 @@ public class DiagnosticForm {
     @NotNull
     private Boolean digestiveIssues;
 
-    @ElementCollection(targetClass = TastePreference.class)
+    @ElementCollection(targetClass = TastePreference.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "taste_preferences", joinColumns = @JoinColumn(name = "form_id"))
     @Column(name = "taste")
     private Set<TastePreference> tastePreferences = new HashSet<>();
 
     @NotEmpty
-    @ElementCollection(targetClass = EmotionalCondition.class)
+    @ElementCollection(targetClass = EmotionalCondition.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "emotional_conditions", joinColumns = @JoinColumn(name = "form_id"))
     @Column(name = "condition")
     private Set<EmotionalCondition> emotionalConditions = new HashSet<>();
 
     @NotEmpty
-    @ElementCollection(targetClass = PhysicalCondition.class)
+    @ElementCollection(targetClass = PhysicalCondition.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "physical_conditions", joinColumns = @JoinColumn(name = "form_id"))
     @Column(name = "condition")

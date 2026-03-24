@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,10 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.labotigadelaterra.la_botiga_de_la_terra.dto.request.DiagnosticFormRequestDTO;
 import com.labotigadelaterra.la_botiga_de_la_terra.dto.response.DiagnosticFormResponseDTO;
-import com.labotigadelaterra.la_botiga_de_la_terra.entity.DiagnosticForm;
 import com.labotigadelaterra.la_botiga_de_la_terra.entity.User;
-import com.labotigadelaterra.la_botiga_de_la_terra.mapper.DiagnosticFormMapper;
-import com.labotigadelaterra.la_botiga_de_la_terra.repository.UserRepository;
 import com.labotigadelaterra.la_botiga_de_la_terra.service.DiagnosticFormService;
 
 import jakarta.validation.Valid;
@@ -27,12 +26,9 @@ import jakarta.validation.Valid;
 public class DiagnosticFormController {
 
     private final DiagnosticFormService diagnosticFormService;
-    private final UserRepository userRepository;
 
-    public DiagnosticFormController(DiagnosticFormService diagnosticFormService, DiagnosticFormMapper mapper,
-            UserRepository userRepository) {
+    public DiagnosticFormController(DiagnosticFormService diagnosticFormService) {
         this.diagnosticFormService = diagnosticFormService;
-        this.userRepository = userRepository;
     }
 
     @PostMapping
@@ -45,7 +41,8 @@ public class DiagnosticFormController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DiagnosticFormResponseDTO> updateForm(@PathVariable int id, @Valid @RequestBody DiagnosticFormRequestDTO request) {  
+    public ResponseEntity<DiagnosticFormResponseDTO> updateForm(@PathVariable int id,
+            @Valid @RequestBody DiagnosticFormRequestDTO request) {
         DiagnosticFormResponseDTO updatedForm = diagnosticFormService.updateForm(id, request);
         return new ResponseEntity<>(updatedForm, HttpStatus.OK);
     }
@@ -63,6 +60,25 @@ public class DiagnosticFormController {
         // dsp context de usuario logueado
         List<DiagnosticFormResponseDTO> forms = diagnosticFormService.getFormsByUser(user);
         return new ResponseEntity<>(forms, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteForm(@PathVariable int id) {
+        diagnosticFormService.deleteForm(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PatchMapping("/{id}/submit")
+    public ResponseEntity<DiagnosticFormResponseDTO> submitForm(@PathVariable int id) {
+        DiagnosticFormResponseDTO response = diagnosticFormService.submitForm(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // Pruebas postman
+    @PatchMapping("/{id}/confirm-payment")
+    public ResponseEntity<DiagnosticFormResponseDTO> confirmPayment(@PathVariable int id) {
+        DiagnosticFormResponseDTO response = diagnosticFormService.confirmPayment(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }
