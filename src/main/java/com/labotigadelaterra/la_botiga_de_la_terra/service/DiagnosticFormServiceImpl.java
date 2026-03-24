@@ -15,36 +15,41 @@ import com.labotigadelaterra.la_botiga_de_la_terra.repository.DiagnosticFormRepo
 public class DiagnosticFormServiceImpl implements DiagnosticFormService {
 
     private final DiagnosticFormRepository diagnosticFormRepository;
-    private final DiagnosticFormMapper mapper;
+    private final DiagnosticFormMapper diagnosticFormMapper;
 
-    public DiagnosticFormServiceImpl(DiagnosticFormRepository diagnosticFormRepository, DiagnosticFormMapper mapper) {
+    public DiagnosticFormServiceImpl(DiagnosticFormRepository diagnosticFormRepository,
+            DiagnosticFormMapper diagnosticFormMapper) {
         this.diagnosticFormRepository = diagnosticFormRepository;
-        this.mapper = mapper;
+        this.diagnosticFormMapper = diagnosticFormMapper;
     }
 
     @Override
     public DiagnosticForm createForm(DiagnosticFormRequestDTO request, User user) {
-        DiagnosticForm form = mapper.toEntity(request, user);
+        DiagnosticForm form = diagnosticFormMapper.toEntity(request, user);
         form.setFormStatus(FormStatus.DRAFT);
         return diagnosticFormRepository.save(form);
     }
 
     @Override
-    public DiagnosticForm getFormById(Integer id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getFormById'");
+    public DiagnosticForm getFormById(int id) {
+        return diagnosticFormRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Formulario no encontrado"));
     }
 
-    @Override
-    public List<DiagnosticForm> getFormsByUser(User user) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getFormsByUser'");
-    }
+    // @Override
+    // public List<DiagnosticForm> getFormsByUser(User user) {
+    //     return 
+    // }
 
     @Override
-    public DiagnosticForm updateForm(Integer id, DiagnosticFormRequestDTO request) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateForm'");
+    public DiagnosticForm updateForm(int id, DiagnosticFormRequestDTO request) {
+        DiagnosticForm existingForm = diagnosticFormRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Formulario no encontrado"));
+        if (existingForm.getFormStatus() != FormStatus.DRAFT) {
+            throw new RuntimeException("Solo se pueden editar formularios en estado BORRADOR.");
+        }
+        diagnosticFormMapper.updateEntityFromDto(request, existingForm);
+        return diagnosticFormRepository.save(existingForm);
     }
 
     @Override
