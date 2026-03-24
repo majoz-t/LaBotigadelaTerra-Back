@@ -18,5 +18,4 @@ public record RegisterRequestDTO(
     String password
 ) {
    
-
 }
