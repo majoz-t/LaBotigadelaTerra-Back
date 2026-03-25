@@ -4,15 +4,25 @@ Backend del sistema de diagnóstico para La Botiga de la Terra, desarrollado con
 Permite gestionar formularios de diagnóstico de usuarios, incluyendo estados, validaciones y lógica de negocio.
 
 🚀 Tecnologías utilizadas
+
 ☕ Java 21
+
 🌱 Spring Boot 3
+
 🗄️ Spring Data JPA (Hibernate)
+
 ✅ Spring Validation
+
 🐘 PostgreSQL
+
 🔄 MapStruct (mappers)
+
 🧩 Lombok
+
 🌍 Dotenv (variables de entorno)
+
 🧪 Postman (testing de endpoints)
+
 
 🏗️ Arquitectura del sistema
 
@@ -162,16 +172,22 @@ mvn spring-boot:run
 Base URL:
 
 http://localhost:8080/api/v1/diagnosticforms
+
 📌 Crear formulario
 POST /
+
 📌 Actualizar formulario
 PUT /{id}
+
 📌 Obtener por ID
 GET /{id}
+
 📌 Obtener formularios del usuario
 GET /userforms
+
 📌 Eliminar formulario
 DELETE /{id}
+
 
 ⚠️ Validaciones
 
