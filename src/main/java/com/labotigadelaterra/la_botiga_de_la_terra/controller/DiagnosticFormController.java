@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.labotigadelaterra.la_botiga_de_la_terra.dto.request.DiagnosticFormRequestDTO;
@@ -34,7 +35,7 @@ public class DiagnosticFormController {
     @PostMapping
     public ResponseEntity<DiagnosticFormResponseDTO> createForm(@Valid @RequestBody DiagnosticFormRequestDTO request) {
         User user = new User();
-        user.setId(1);
+        user.setId(request.userId());
         // User user = authService.getCurrentUser();
         DiagnosticFormResponseDTO response = diagnosticFormService.createForm(request, user);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -54,9 +55,9 @@ public class DiagnosticFormController {
     }
 
     @GetMapping("/userforms")
-    public ResponseEntity<List<DiagnosticFormResponseDTO>> getFormsByUser() {
+    public ResponseEntity<List<DiagnosticFormResponseDTO>> getFormsByUser(@RequestParam int userId) {
         User user = new User();
-        user.setId(1);
+        user.setId(userId);
         // dsp context de usuario logueado
         List<DiagnosticFormResponseDTO> forms = diagnosticFormService.getFormsByUser(user);
         return new ResponseEntity<>(forms, HttpStatus.OK);
@@ -74,10 +75,10 @@ public class DiagnosticFormController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // Pruebas postman
-    @PatchMapping("/{id}/confirm-payment")
-    public ResponseEntity<DiagnosticFormResponseDTO> confirmPayment(@PathVariable int id) {
-        DiagnosticFormResponseDTO response = diagnosticFormService.confirmPayment(id);
+    // SIMULACIÓN PAGO
+    @PatchMapping("/{id}/confirm-fake-payment")
+    public ResponseEntity<DiagnosticFormResponseDTO> confirmFakePayment(@PathVariable int id) {
+      DiagnosticFormResponseDTO response = diagnosticFormService.confirmFakePayment(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

@@ -22,5 +22,5 @@ public interface DiagnosticFormService {
 
     public List<DiagnosticFormResponseDTO> getFormsForDoctor();
 
-    public DiagnosticFormResponseDTO confirmPayment(int id);
+    public DiagnosticFormResponseDTO confirmFakePayment(int id);
 }
