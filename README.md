@@ -85,27 +85,26 @@ Código limpio
 Menos boilerplate
 Mayor mantenibilidad
 
-🧠 Flujo de una petición
-Cliente → Controller → Service → Repository → DB
-                              ↓
-                         Mapper (DTO ↔ Entity)
-                              ↓
-Cliente ← Controller ← Service
-
-
-
 📁 Estructura del proyecto
 config/
-controller/
-dto/
- ├── request/
- └── response/
-entity/
- └── enums/
-mapper/
-repository/
-service/
 
+controller/
+
+dto/
+
+ ├── request/
+ 
+ └── response/
+ 
+entity/
+
+ └── enums/
+ 
+mapper/
+
+repository/
+
+service/
 
 
 🎯 Principios aplicados
