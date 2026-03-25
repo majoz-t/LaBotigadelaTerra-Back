@@ -7,6 +7,7 @@ public interface UserService {
 
     public User registerUser(RegisterRequestDTO dto);
 
+    void deleteUser(int id);
 
     //public User findByEmail(String email);
 
