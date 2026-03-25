@@ -1,4 +1,4 @@
-🌿 La Botiga de la Terra - Backend
+               🌿 La Botiga de la Terra - Backend
 
 Backend del sistema de diagnóstico para La Botiga de la Terra, desarrollado con Spring Boot.
 Permite gestionar formularios de diagnóstico de usuarios, incluyendo estados, validaciones y lógica de negocio.
@@ -24,9 +24,12 @@ Permite gestionar formularios de diagnóstico de usuarios, incluyendo estados, v
 🧪 Postman (testing de endpoints)
 
 
-🏗️ Arquitectura del sistema
+
+
+  🏗️ Arquitectura del sistema
 
 El backend está diseñado siguiendo una arquitectura cliente-servidor y el patrón MVC (Modelo - Vista - Controlador) adaptado a una API REST en 3 capas.
+
 
 🌐 Arquitectura Cliente - Servidor
 
@@ -34,6 +37,7 @@ Cliente (Frontend): Aplicación web que consume la API REST
 Servidor (Backend): API desarrollada en Spring Boot que gestiona la lógica de negocio y acceso a datos
 
 👉 Comunicación mediante HTTP + JSON
+
 
 🧱 Arquitectura en 3 capas (Spring Boot)
 
@@ -48,7 +52,7 @@ Recibe peticiones HTTP
 Valida inputs (@Valid)
 Devuelve respuestas (DTOs)
 
-📂 service
+2️⃣📂 service
 
 Contiene la lógica de negocio
 Gestiona estados del formulario
@@ -71,6 +75,7 @@ Uso de JPA / Hibernate
 Relaciones:
 @ManyToOne (User → Forms)
 @ElementCollection (listas de condiciones)
+
 🔄 DTOs (Data Transfer Objects)
 
 📂 dto/request
@@ -81,6 +86,7 @@ Se utilizan para:
 Separar la entidad de la API
 Controlar qué datos se envían/reciben
 Evitar exponer la base de datos
+
 🔁 Mappers (MapStruct)
 
 📂 mapper
@@ -117,7 +123,10 @@ repository/
 service/
 
 
-🎯 Principios aplicados
+
+
+  🎯 Principios aplicados
+
 
 Separación de responsabilidades (SRP)
 Bajo acoplamiento
@@ -125,7 +134,10 @@ Alta cohesión
 Arquitectura escalable
 API RESTful
 
-📦 Funcionalidades principales
+
+
+  📦 Funcionalidades principales
+
 
 Crear formularios de diagnóstico
 Guardar formularios en estado DRAFT
@@ -139,7 +151,10 @@ PENDING_PAYMENT
 SUBMITTED
 COMPLETED
 
-🔗 Frontend
+
+
+  🔗 Frontend
+
 
 El frontend del proyecto se encuentra en el siguiente repositorio:
 
@@ -158,7 +173,9 @@ spring.datasource.password=tu_password
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 
-▶️ Cómo ejecutar el proyecto
+  ▶️ Cómo ejecutar el proyecto
+
+
 
 Clonar el repositorio:
 git clone https://github.com/tu-repo-back.git
@@ -167,7 +184,9 @@ Configurar base de datos
 Ejecutar:
 mvn spring-boot:run
 
-🧪 Endpoints principales
+
+ 🧪 Endpoints principales
+
 
 Base URL:
 
@@ -189,7 +208,10 @@ GET /userforms
 DELETE /{id}
 
 
-⚠️ Validaciones
+
+
+  ⚠️ Validaciones
+
 
 Se implementan validaciones con jakarta.validation, por ejemplo:
 
@@ -198,7 +220,10 @@ Altura y peso positivos
 Campos obligatorios
 Selección mínima en listas
 
-🔄 MapStruct
+
+
+  🔄 MapStruct
+
 
 Se utiliza MapStruct para mapear:
 
@@ -207,22 +232,33 @@ Entity → DTO
 
 Esto permite mantener el código limpio y desacoplado.
 
-🧩 Lombok
+
+
+  🧩 Lombok
+
 
 @Data
 @NoArgsConstructor
 
-🧪 Testing
+
+
+  🧪 Testing
+
 
 Las pruebas iniciales de endpoints se realizaron con Postman.
 
-📌 Estado del proyecto
+
+  📌 Estado del proyecto
+
 
 ✔ Backend funcional
 ✔ CRUD completo (DiagnosticForm)
 ✔ Validaciones implementadas
 ✔ Arquitectura escalable
 
+
+
 👩‍💻 Autora
+
 
 Proyecto desarrollado por María José Ozta Castro 🌿
