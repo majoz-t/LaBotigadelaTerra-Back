@@ -15,6 +15,9 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 public record DiagnosticFormRequestDTO( 
+    @NotNull(message = "El ID de usuario es obligatorio")
+    Integer userId,
+
     @NotNull(message = "La edad es obligatoria")
     @Min(value = 0, message = "La edad no puede ser negativa")
     @Max(value = 120, message = "Edad no válida")

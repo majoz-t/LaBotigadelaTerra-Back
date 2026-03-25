@@ -1,6 +1,5 @@
 package com.labotigadelaterra.la_botiga_de_la_terra.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -42,8 +41,8 @@ public class DiagnosticFormServiceImpl implements DiagnosticFormService {
     public DiagnosticFormResponseDTO updateForm(int id, DiagnosticFormRequestDTO request) {
         DiagnosticForm existingForm = diagnosticFormRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Formulario no encontrado"));
-        if (existingForm.getFormStatus() != FormStatus.DRAFT) {
-            throw new RuntimeException("Solo se pueden editar formularios en estado BORRADOR.");
+        if (existingForm.getFormStatus() == FormStatus.COMPLETED || existingForm.getFormStatus() == FormStatus.SUBMITTED) {
+            throw new RuntimeException("El diagnóstico ya fue enviado.");
         }
         diagnosticFormMapper.updateEntityFromDto(request, existingForm);
         DiagnosticForm updatedForm = diagnosticFormRepository.save(existingForm);
@@ -84,8 +83,8 @@ public class DiagnosticFormServiceImpl implements DiagnosticFormService {
     public DiagnosticFormResponseDTO submitForm(int id) {
         DiagnosticForm form = diagnosticFormRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Formulario no encontrado"));
-        if (form.getFormStatus() != FormStatus.DRAFT) {
-            throw new IllegalStateException("El formulario ya ha sido enviado o está en proceso de pago.");
+        if (form.getFormStatus() == FormStatus.COMPLETED || form.getFormStatus() == FormStatus.SUBMITTED) {
+            throw new IllegalStateException("El formulario ya ha sido enviado y no se puede re-enviar.");
         }
         form.setFormStatus(FormStatus.PENDING_PAYMENT);
         DiagnosticForm updatedForm = diagnosticFormRepository.save(form);
@@ -100,19 +99,18 @@ public class DiagnosticFormServiceImpl implements DiagnosticFormService {
                 .toList();
     }
 
+    //SIMULACIÓN DE PAGO
     @Override
     @Transactional
-    public DiagnosticFormResponseDTO confirmPayment(int id) {
-        DiagnosticForm form = diagnosticFormRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Formulario no encontrado"));
-        if (form.getFormStatus() != FormStatus.PENDING_PAYMENT) {
-            throw new IllegalStateException("El formulario no está en espera de pago.");
-        }
-        form.setFormStatus(FormStatus.SUBMITTED);
-        form.setSubmittedAt(LocalDateTime.now());
-        DiagnosticForm updatedForm = diagnosticFormRepository.save(form);
-        return diagnosticFormMapper.toResponse(updatedForm);
-
+    public DiagnosticFormResponseDTO confirmFakePayment(int id) {
+    DiagnosticForm form = diagnosticFormRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Formulario no encontrado"));
+    if (form.getFormStatus() == FormStatus.SUBMITTED || form.getFormStatus() == FormStatus.COMPLETED) {
+        throw new RuntimeException("El pago ya ha sido procesado anteriormente.");
     }
+    form.setFormStatus(FormStatus.SUBMITTED);
+    DiagnosticForm updatedForm = diagnosticFormRepository.save(form);
+    return diagnosticFormMapper.toResponse(updatedForm);
+}
 
 }
