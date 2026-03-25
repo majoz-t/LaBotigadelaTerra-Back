@@ -4,5 +4,6 @@ public enum TastePreference {
     SWEET,
     SALTY,
     SOUR,
-    BITTER
+    BITTER,
+    PUNGENT
 }
