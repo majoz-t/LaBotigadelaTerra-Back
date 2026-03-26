@@ -1,264 +1,315 @@
-               🌿 La Botiga de la Terra - Backend
+# 🌿 La Botiga de la Terra - Backend
 
-Backend del sistema de diagnóstico para La Botiga de la Terra, desarrollado con Spring Boot.
+Backend del sistema de diagnóstico para *La Botiga de la Terra*, desarrollado con **Spring Boot**.
 Permite gestionar formularios de diagnóstico de usuarios, incluyendo estados, validaciones y lógica de negocio.
 
-🚀 Tecnologías utilizadas
+---
 
-☕ Java 21
+## 🚀 Tecnologías utilizadas
 
-🌱 Spring Boot 3
+* ☕ Java 21
+* 🌱 Spring Boot 3
+* 🗄️ Spring Data JPA (Hibernate)
+* ✅ Spring Validation
+* 🐘 PostgreSQL
+* 🔄 MapStruct (mappers)
+* 🧩 Lombok
+* 🌍 Dotenv (variables de entorno)
+* 🧪 Postman (testing de endpoints)
 
-🗄️ Spring Data JPA (Hibernate)
+---
 
-✅ Spring Validation
+# 🏗️ Arquitectura del sistema
 
-🐘 PostgreSQL
+El backend está diseñado siguiendo una arquitectura **cliente-servidor** y el patrón **MVC (Modelo - Vista - Controlador)** adaptado a una API REST en **3 capas**.
 
-🔄 MapStruct (mappers)
+---
 
-🧩 Lombok
+## 🌐 Arquitectura Cliente - Servidor
 
-🌍 Dotenv (variables de entorno)
+* **Cliente (Frontend)**: Aplicación web que consume la API REST
+* **Servidor (Backend)**: API desarrollada en Spring Boot que gestiona la lógica de negocio y acceso a datos
 
-🧪 Postman (testing de endpoints)
+👉 Comunicación mediante **HTTP + JSON**
 
+---
 
-
-
-  🏗️ Arquitectura del sistema
-
-El backend está diseñado siguiendo una arquitectura cliente-servidor y el patrón MVC (Modelo - Vista - Controlador) adaptado a una API REST en 3 capas.
-
-
-🌐 Arquitectura Cliente - Servidor
-
-Cliente (Frontend): Aplicación web que consume la API REST
-Servidor (Backend): API desarrollada en Spring Boot que gestiona la lógica de negocio y acceso a datos
-
-👉 Comunicación mediante HTTP + JSON
-
-
-🧱 Arquitectura en 3 capas (Spring Boot)
+## 🧱 Arquitectura en 3 capas (Spring Boot)
 
 El proyecto sigue una separación clara de responsabilidades:
 
-1️⃣ Controller (Capa de presentación)
+### 1️⃣ Controller (Capa de presentación)
 
-📂 controller
+📂 `controller`
 
-Expone los endpoints REST
-Recibe peticiones HTTP
-Valida inputs (@Valid)
-Devuelve respuestas (DTOs)
+* Expone los endpoints REST
+* Recibe peticiones HTTP
+* Valida inputs (`@Valid`)
+* Devuelve respuestas (DTOs)
 
-2️⃣📂 service
+---
 
-Contiene la lógica de negocio
-Gestiona estados del formulario
-Aplica reglas (ej: solo editar en DRAFT)
-Orquesta operaciones entre repository y mapper
+### 2️⃣ Service (Capa de negocio)
 
-3️⃣ Repository (Capa de acceso a datos)
+📂 `service`
 
-📂 repository
+* Contiene la lógica de negocio
+* Gestiona estados del formulario
+* Aplica reglas (ej: solo editar en DRAFT)
+* Orquesta operaciones entre repository y mapper
 
-Comunicación con la base de datos
-Uso de Spring Data JPA
-Consultas automáticas (ej: findByUser)
-🧩 Modelo de datos (Model)
+---
 
-📂 entity
+### 3️⃣ Repository (Capa de acceso a datos)
 
-Representa las tablas en base de datos
-Uso de JPA / Hibernate
-Relaciones:
-@ManyToOne (User → Forms)
-@ElementCollection (listas de condiciones)
+📂 `repository`
 
-🔄 DTOs (Data Transfer Objects)
+* Comunicación con la base de datos
+* Uso de **Spring Data JPA**
+* Consultas automáticas (ej: `findByUser`)
 
-📂 dto/request
-📂 dto/response
+---
+
+## 🧩 Modelo de datos (Model)
+
+📂 `entity`
+
+* Representa las tablas en base de datos
+* Uso de JPA / Hibernate
+* Relaciones:
+
+  * `@ManyToOne` (User → Forms)
+  * `@ElementCollection` (listas de condiciones)
+
+---
+
+## 🔄 DTOs (Data Transfer Objects)
+
+📂 `dto/request`
+📂 `dto/response`
 
 Se utilizan para:
 
-Separar la entidad de la API
-Controlar qué datos se envían/reciben
-Evitar exponer la base de datos
+* Separar la entidad de la API
+* Controlar qué datos se envían/reciben
+* Evitar exponer la base de datos
 
-🔁 Mappers (MapStruct)
+---
 
-📂 mapper
+## 🔁 Mappers (MapStruct)
+
+📂 `mapper`
 
 Responsables de convertir:
 
+```text
 DTO ⇄ Entity
+```
 
 Ventajas:
 
-Código limpio
-Menos boilerplate
-Mayor mantenibilidad
+* Código limpio
+* Menos boilerplate
+* Mayor mantenibilidad
 
-📁 Estructura del proyecto
+---
+
+## 🧠 Flujo de una petición
+
+```text
+Cliente → Controller → Service → Repository → DB
+                              ↓
+                         Mapper (DTO ↔ Entity)
+                              ↓
+Cliente ← Controller ← Service
+```
+
+---
+
+## 📁 Estructura del proyecto
+
+```text
 config/
-
 controller/
-
 dto/
-
  ├── request/
- 
  └── response/
- 
 entity/
-
  └── enums/
- 
 mapper/
-
 repository/
-
 service/
+```
+
+---
+
+## 🎯 Principios aplicados
+
+* Separación de responsabilidades (SRP)
+* Bajo acoplamiento
+* Alta cohesión
+* Arquitectura escalable
+* API RESTful
+
+---
 
 
+## 📦 Funcionalidades principales
 
+* Crear formularios de diagnóstico
+* Guardar formularios en estado **DRAFT**
+* Actualizar formularios (solo si están en DRAFT)
+* Obtener formulario por ID
+* Obtener formularios por usuario
+* Eliminar formularios (con validación de estado)
+* Gestión de estados:
 
-  🎯 Principios aplicados
+  * `DRAFT`
+  * `PENDING_PAYMENT`
+  * `SUBMITTED`
+  * `COMPLETED`
 
+---
 
-Separación de responsabilidades (SRP)
-Bajo acoplamiento
-Alta cohesión
-Arquitectura escalable
-API RESTful
-
-
-
-  📦 Funcionalidades principales
-
-
-Crear formularios de diagnóstico
-Guardar formularios en estado DRAFT
-Actualizar formularios (solo si están en DRAFT)
-Obtener formulario por ID
-Obtener formularios por usuario
-Eliminar formularios (con validación de estado)
-Gestión de estados:
-DRAFT
-PENDING_PAYMENT
-SUBMITTED
-COMPLETED
-
-
-
-  🔗 Frontend
-
+## 🔗 Frontend
 
 El frontend del proyecto se encuentra en el siguiente repositorio:
 
 👉 https://github.com/majoz-t/LaBotigadelaTerra-Front.git
 
-🗄️ Base de datos
+---
 
-Se utiliza PostgreSQL.
+## 🗄️ Base de datos
 
-Configurar en application.properties o .env:
+Se utiliza **PostgreSQL**.
 
+Configurar en `application.properties` o `.env`:
+
+```properties
 spring.datasource.url=jdbc:postgresql://localhost:5432/tu_db
 spring.datasource.username=tu_usuario
 spring.datasource.password=tu_password
 
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
+```
 
-  ▶️ Cómo ejecutar el proyecto
+---
 
+## ▶️ Cómo ejecutar el proyecto
 
+1. Clonar el repositorio:
 
-Clonar el repositorio:
+```bash
 git clone https://github.com/tu-repo-back.git
-Abrir en tu IDE (IntelliJ / VSCode)
-Configurar base de datos
-Ejecutar:
+```
+
+2. Abrir en tu IDE (IntelliJ / VSCode)
+
+3. Configurar base de datos
+
+4. Ejecutar:
+
+```bash
 mvn spring-boot:run
+```
 
+---
 
- 🧪 Endpoints principales
-
+## 🧪 Endpoints principales
 
 Base URL:
 
+```text
 http://localhost:8080/api/v1/diagnosticforms
+```
 
-📌 Crear formulario
+### 📌 Crear formulario
+
+```http
 POST /
+```
 
-📌 Actualizar formulario
+### 📌 Actualizar formulario
+
+```http
 PUT /{id}
+```
 
-📌 Obtener por ID
+### 📌 Obtener por ID
+
+```http
 GET /{id}
+```
 
-📌 Obtener formularios del usuario
+### 📌 Obtener formularios del usuario
+
+```http
 GET /userforms
+```
 
-📌 Eliminar formulario
+### 📌 Eliminar formulario
+
+```http
 DELETE /{id}
+```
+
+---
 
 
+## ⚠️ Validaciones
 
+Se implementan validaciones con `jakarta.validation`, por ejemplo:
 
-  ⚠️ Validaciones
+* Edad entre 0 y 120
+* Altura y peso positivos
+* Campos obligatorios
+* Selección mínima en listas
 
+---
 
-Se implementan validaciones con jakarta.validation, por ejemplo:
+## 🔄 MapStruct
 
-Edad entre 0 y 120
-Altura y peso positivos
-Campos obligatorios
-Selección mínima en listas
+Se utiliza **MapStruct** para mapear:
 
-
-
-  🔄 MapStruct
-
-
-Se utiliza MapStruct para mapear:
-
-DTO → Entity
-Entity → DTO
+* DTO → Entity
+* Entity → DTO
 
 Esto permite mantener el código limpio y desacoplado.
 
+---
 
+## 🧩 Lombok
 
-  🧩 Lombok
+Se usa Lombok para reducir boilerplate:
 
+* `@Data`
+* `@NoArgsConstructor`
+* etc.
 
-@Data
-@NoArgsConstructor
+---
 
+## 🧪 Testing
 
+Las pruebas iniciales de endpoints se realizaron con **Postman**.
 
-  🧪 Testing
+---
 
-
-Las pruebas iniciales de endpoints se realizaron con Postman.
-
-
-  📌 Estado del proyecto
-
+## 📌 Estado del proyecto
 
 ✔ Backend funcional
-✔ CRUD completo (DiagnosticForm)
+✔ CRUD completo
 ✔ Validaciones implementadas
 ✔ Arquitectura escalable
 
+🚧 Pendiente:
 
+* Autenticación (JWT)
+* Integración completa con frontend
 
-👩‍💻 Autora
+---
 
+## 👩‍💻 Autora
 
-Proyecto desarrollado por María José Ozta Castro 🌿
+Proyecto desarrollado por **María José Ozta Castro** 🌿
+
